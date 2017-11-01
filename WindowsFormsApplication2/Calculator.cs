@@ -95,7 +95,13 @@ namespace Calculator
 
         private void buttonequal_Click(object sender, EventArgs e)
         {
-            
+
+            //textBoxresult.Text = Text.ToString();
+            Stack<string> elements = new Stack<string>();
+             
+            textBoxresult.Text=evalrpn(elements).ToString();
+
+
         }
 
         private void button12_Click(object sender, EventArgs e)
@@ -106,7 +112,7 @@ namespace Calculator
         }
 
         private void buttonminus_Click(object sender, EventArgs e)
-        {
+        {   
             operand1 = textBoxresult.Text;
             textBoxresult.Text += " - ";
             operation = '-';
@@ -118,10 +124,30 @@ namespace Calculator
             textBoxresult.Text += " : ";
             operation = '/';
         }
-        
+
+        private double evalrpn(Stack<string> stackOfNumbers)
+        {
+             string[] splittingString=
+            for (int i = 0; i < textBoxresult.Text.Length; i++)
+            {
+                stackOfNumbers.Push(textBoxresult.Text);
+            }
+            string elements = stackOfNumbers.Pop();
+            double x, y;
+            if (!Double.TryParse(elements, out x))
+            {
+                y = evalrpn(stackOfNumbers);
+                x = evalrpn(stackOfNumbers);
+                if (elements == "+") x += y;
+                else if (elements == "-") x -= y;
+                else if (elements == "*") x *= y;
+                else if (elements == "/") x /= y;
+                else throw new Exception();
+            }
+            return x;
+        }
 
 
-        
-       
+
     }
 }
