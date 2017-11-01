@@ -122,7 +122,7 @@ namespace Calculator
         {
             operand1 = textBoxresult.Text;
             textBoxresult.Text += " : ";
-            operation = '/';
+            //operation = '/';
         }
 
         private double evalrpn(Stack<string> stackOfNumbers)
