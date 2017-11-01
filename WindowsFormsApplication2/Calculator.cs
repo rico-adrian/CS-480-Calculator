@@ -127,7 +127,7 @@ namespace Calculator
 
         private double evalrpn(Stack<string> stackOfNumbers)
         {
-             string[] splittingString=
+             //string[] splittingString=
             for (int i = 0; i < textBoxresult.Text.Length; i++)
             {
                 stackOfNumbers.Push(textBoxresult.Text);
