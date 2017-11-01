@@ -122,15 +122,15 @@ namespace Calculator
         {
             operand1 = textBoxresult.Text;
             textBoxresult.Text += " : ";
-            //operation = '/';
+            operation = '/';
         }
 
         private double evalrpn(Stack<string> stackOfNumbers)
         {
-             //string[] splittingString=
-            for (int i = 0; i < textBoxresult.Text.Length; i++)
+            string[] splittingString = textBoxresult.Text.Split();
+            for (int i = 0; i < 3; i++)
             {
-                stackOfNumbers.Push(textBoxresult.Text);
+                stackOfNumbers.Push(splittingString[i]);
             }
             string elements = stackOfNumbers.Pop();
             double x, y;
