@@ -50,27 +50,27 @@ namespace Calculator
 
         private void button6_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += " 6";
+            textBoxresult.Text += "6";
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += " 7";
+            textBoxresult.Text += "7";
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += " 8";
+            textBoxresult.Text += "8";
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += " 9";
+            textBoxresult.Text += "9";
         }
 
         private void button0_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += " 0";
+            textBoxresult.Text += "0";
         }
 
         private void textBoxresult_TextChanged(object sender, EventArgs e)
@@ -97,6 +97,7 @@ namespace Calculator
         private void buttonequal_Click(object sender, EventArgs e)
         {
             string tokens = textBoxresult.Text;
+           
             string[] infix = tokens.Split(' '); //splitting the tokens of string
             //textBoxresult.Text = Text.ToString();
             Stack<string> stackOfCalculator = new Stack<string>();
@@ -110,19 +111,21 @@ namespace Calculator
             StringBuilder postfix = new StringBuilder();
             for (int i = 0; i < infix.Length; i++)
             {
-                if (infix[i] == " " || infix[i] == ".") continue;
+                if (infix[i] == " " || infix[i] == ".") { continue; }
                 else if (IsOperator(infix[i]))
                 {
+
                     while (stackOfCalculator.Count != 0 && stackOfCalculator.Peek() != "(")
                     {
-                        postfix.Append( stackOfCalculator.Peek());
+                        postfix.Append(stackOfCalculator.Peek());
                         stackOfCalculator.Pop();
                     }
                     stackOfCalculator.Push(infix[i]);
+
                 }
                 else if (IsDigit(infix[i]))
                 {
-                    postfix.Append( infix[i]);
+                    postfix.Append(infix[i]).Append(" ");
                 }
 
                 else if (infix[i] == "(")
@@ -132,9 +135,9 @@ namespace Calculator
 
                 else if (infix[i] == ")")
                 {
-                    while (stackOfCalculator.Count!= 0 && stackOfCalculator.Peek() != "(")
+                    while (stackOfCalculator.Count != 0 && stackOfCalculator.Peek() != "(")
                     {
-                        postfix.Append( stackOfCalculator.Peek());
+                        postfix.Append(stackOfCalculator.Peek());
                         stackOfCalculator.Pop();
                     }
                     stackOfCalculator.Pop();
@@ -143,15 +146,18 @@ namespace Calculator
 
 
             }
-
+                            
             while(stackOfCalculator.Count()!=0)
             {
                 postfix.Append( stackOfCalculator.Peek());
                 stackOfCalculator.Pop();
             }
+           // textBoxresult.Text = "6 9 x 5 -";
             //infixToPostfix(infix);
-            //double x = Calculation(infix);
+            //double x = Calculation(postfix.ToString());
             //postfix.Append("2");
+            textBoxresult.Text = String.Empty;
+            //textBoxresult.Text = x.ToString();
             textBoxresult.Text=postfix.ToString();
 
 
@@ -219,11 +225,11 @@ namespace Calculator
                  
 
             }
-            for (int j = 0; j < stackOfCalculator.Count; j++)
-            {
-                postfix += stackOfCalculator.Pop();
-                stackOfCalculator.Pop();
-            }
+           // while(stackOfCalculator.Count!=0)
+            //{
+                //postfix += stackOfCalculator.Pop();
+                //stackOfCalculator.Pop();
+            //}
           
             
             return postfix.ToString();
@@ -301,7 +307,7 @@ namespace Calculator
             }
             else
             {
-                return false;
+                return true;
             }
         }
         private int Precedence(string operation)
