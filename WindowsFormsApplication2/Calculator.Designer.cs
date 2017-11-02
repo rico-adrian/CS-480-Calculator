@@ -49,6 +49,7 @@
             this.buttonleftparentheses = new System.Windows.Forms.Button();
             this.textBoxresult = new System.Windows.Forms.TextBox();
             this.buttonpower = new System.Windows.Forms.Button();
+            this.buttonDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -300,11 +301,24 @@
             this.buttonpower.UseVisualStyleBackColor = true;
             this.buttonpower.Click += new System.EventHandler(this.buttonpower_Click);
             // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDelete.Location = new System.Drawing.Point(383, 187);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.buttonDelete.Size = new System.Drawing.Size(75, 43);
+            this.buttonDelete.TabIndex = 22;
+            this.buttonDelete.Text = "DEL";
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
             // Calculator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(475, 449);
+            this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.buttonpower);
             this.Controls.Add(this.textBoxresult);
             this.Controls.Add(this.buttonleftparentheses);
@@ -357,6 +371,7 @@
         private System.Windows.Forms.Button buttonleftparentheses;
         private System.Windows.Forms.TextBox textBoxresult;
         private System.Windows.Forms.Button buttonpower;
+        private System.Windows.Forms.Button buttonDelete;
     }
 }
 

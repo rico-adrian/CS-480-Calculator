@@ -14,7 +14,16 @@ namespace Calculator
         [STAThread]
         static void Main()
         {
-            
+
+            try
+            {
+
+            }
+             catch (System.ArgumentOutOfRangeException ex)
+            {
+                System.Console.WriteLine(ex.Message);
+                throw new System.ArgumentOutOfRangeException("No text to be deleted", ex);
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Calculator());
