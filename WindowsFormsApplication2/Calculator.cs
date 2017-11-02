@@ -110,6 +110,7 @@ namespace Calculator
             //try catch block
             try
             {
+              
                 string tokens = textBoxresult.Text; //declare variable tokens which is the current elements 
                                                     //on the textboxResult. Will be cleared/changed everytime 
                                                     //this button is clicked
@@ -157,7 +158,7 @@ namespace Calculator
                         postfix.Append(infix[i - 1]);
                         if (i < infix.Length)
                         {
-                            if (IsOperator(infix[i]))
+                            if (IsOperator(infix[i])||infix[i]=='('||infix[i]==')')
                             {
                                 postfix.Append(" ");
                             }
@@ -181,15 +182,17 @@ namespace Calculator
                     //the stack without removing it by using peek, then pop/remove it.
                     else if (infix[i - 1] == ')')
                     {
-                        stackOfCalculator.Pop();
+
                         while (stackOfCalculator.Count() != 0 && stackOfCalculator.Peek() != '(')
                         {
                             postfix.Append(stackOfCalculator.Peek());
                             stackOfCalculator.Pop();
                         }
+                        stackOfCalculator.Pop();
 
-                       
                     }
+                  
+
 
                 }
 
@@ -213,36 +216,21 @@ namespace Calculator
                 //convert double into string for the calculation and changing the current element
                 textBoxresult.Text = resultOfCalculation.ToString();
 
-            }   
-            catch(System.ArgumentOutOfRangeException ex)
-            {
-                
-                MessageBox.Show(ex.Message);
-                throw new System.ArgumentOutOfRangeException("No text to be deleted", ex);
             }
-            catch (System.DivideByZeroException d)
-            {
-             
-                MessageBox.Show(d.Message);
-                throw new System.ArgumentOutOfRangeException("Error. Cannot divide a number by zero", d);
-            }
+
             catch (System.InvalidOperationException i)
             {
 
-                MessageBox.Show(i.Message);
-                throw new System.ArgumentOutOfRangeException("Error. invalid operation", i);
-            }
-            catch (System.StackOverflowException s)
-            {
-                MessageBox.Show(s.Message);
-                throw new System.ArgumentOutOfRangeException("Error. Please enter a smaller input", s);
+                MessageBox.Show("Invalid operation");
+                Application.Restart();
+
             }
             catch (System.IO.IOException ex2)
             {
-                MessageBox.Show(ex2.Message);
-                throw new System.ArgumentOutOfRangeException("Error. Please fix your program", ex2);
+                MessageBox.Show("Invalid input");
+                Application.Restart();
             }
-
+            
 
         }
 
@@ -300,6 +288,7 @@ namespace Calculator
                 }
 
                 //if it returns false, create a switch statements to evaluate the postfix expressions
+                //if the element is not a digit(an operator)
                 else
                 {
                     switch (elements[i])
@@ -432,12 +421,15 @@ namespace Calculator
         //delete clear( DEL ) to delete elements from textBoxResult one by one
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-           if(textBoxresult.Text=="")
+           
+            if (textBoxresult.Text.Length > 1)
             {
-                MessageBox.Show("no text to be deleted"," ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                textBoxresult.Text = textBoxresult.Text.Remove(textBoxresult.Text.Length - 1);
             }
-            textBoxresult.Text = textBoxresult.Text.Remove(textBoxresult.Text.Length - 1);
-            
+            else
+            {
+                textBoxresult.Text = "";
+            }
         }
     }
 }
