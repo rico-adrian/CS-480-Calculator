@@ -25,57 +25,58 @@ namespace Calculator
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
-            textBoxresult.Text += "1";
+        { 
+            textBoxresult.Text += " 1";
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += "2";
+            textBoxresult.Text += " 2";
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += "3";
+            textBoxresult.Text += " 3";
         }
         private void button4_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += "4";
+            textBoxresult.Text += " 4";
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += "5";
+            textBoxresult.Text += " 5";
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += "6";
+            textBoxresult.Text += " 6";
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += "7";
+            textBoxresult.Text += " 7";
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += "8";
+            textBoxresult.Text += " 8";
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += "9";
+            textBoxresult.Text += " 9";
         }
 
         private void button0_Click(object sender, EventArgs e)
         {
-            textBoxresult.Text += "0";
+            textBoxresult.Text += " 0";
         }
 
         private void textBoxresult_TextChanged(object sender, EventArgs e)
         {
-            textBoxresult.ReadOnly = true;
+            //textBoxresult.ReadOnly = true;
+            //InfixToPostFixConverter
         }
 
         private void buttonclear_Click(object sender, EventArgs e)
@@ -95,11 +96,64 @@ namespace Calculator
 
         private void buttonequal_Click(object sender, EventArgs e)
         {
-
+            string tokens = textBoxresult.Text;
+            string[] infix = tokens.Split(' '); //splitting the tokens of string
             //textBoxresult.Text = Text.ToString();
-            Stack<string> elements = new Stack<string>();
-             
-            textBoxresult.Text=evalrpn(elements).ToString();
+            Stack<string> stackOfCalculator = new Stack<string>();
+           for(int i=0;i<infix.Length;i++)
+            {
+                //double x = Convert.ToDouble(tokens[i]);
+                stackOfCalculator.Push(infix[i]);
+            }
+            //textBoxresult.Text=stackOfCalculator.Pop();
+
+            StringBuilder postfix = new StringBuilder();
+            for (int i = 0; i < infix.Length; i++)
+            {
+                if (infix[i] == " " || infix[i] == ".") continue;
+                else if (IsOperator(infix[i]))
+                {
+                    while (stackOfCalculator.Count != 0 && stackOfCalculator.Peek() != "(")
+                    {
+                        postfix.Append( stackOfCalculator.Peek());
+                        stackOfCalculator.Pop();
+                    }
+                    stackOfCalculator.Push(infix[i]);
+                }
+                else if (IsDigit(infix[i]))
+                {
+                    postfix.Append( infix[i]);
+                }
+
+                else if (infix[i] == "(")
+                {
+                    stackOfCalculator.Push(infix[i]);
+                }
+
+                else if (infix[i] == ")")
+                {
+                    while (stackOfCalculator.Count!= 0 && stackOfCalculator.Peek() != "(")
+                    {
+                        postfix.Append( stackOfCalculator.Peek());
+                        stackOfCalculator.Pop();
+                    }
+                    stackOfCalculator.Pop();
+                }
+
+
+
+            }
+
+            while(stackOfCalculator.Count()!=0)
+            {
+                postfix.Append( stackOfCalculator.Peek());
+                stackOfCalculator.Pop();
+            }
+            //infixToPostfix(infix);
+            //double x = Calculation(infix);
+            //postfix.Append("2");
+            textBoxresult.Text=postfix.ToString();
+
 
 
         }
@@ -112,7 +166,7 @@ namespace Calculator
         }
 
         private void buttonminus_Click(object sender, EventArgs e)
-        {   
+        {
             operand1 = textBoxresult.Text;
             textBoxresult.Text += " - ";
             operation = '-';
@@ -125,29 +179,169 @@ namespace Calculator
             operation = '/';
         }
 
-        private double evalrpn(Stack<string> stackOfNumbers)
+        private string infixToPostfix(string[] infix, Stack<string> stackOfCalculator)
         {
-            string[] splittingString = textBoxresult.Text.Split();
-            for (int i = 0; i < 3; i++)
+            stackOfCalculator = new Stack<string>();
+            string postfix = "";
+            String result = textBoxresult.Text.ToString();
+            infix = result.Split(' '); //splitting the tokens of string
+            for (int i = 0; i < infix.Length; i++)
             {
-                stackOfNumbers.Push(splittingString[i]);
+                if (infix[i] == " "|| infix[i] == ".") continue;
+                if (IsOperator(infix[i]))
+                {
+                    while (stackOfCalculator.Count() != 0 && stackOfCalculator.Peek() != "(")
+                    {
+                        postfix += stackOfCalculator.Peek();
+                        stackOfCalculator.Pop();
+                    }
+                    stackOfCalculator.Push(infix[i]);
+                }
+                else if (IsDigit(infix[i])) {
+                    postfix += infix[i];
+                }
+
+                else if (infix[i] == "(")
+                {
+                    stackOfCalculator.Push(infix[i]);
+                }
+
+                else if (infix[i] == ")")
+                {
+                    while (stackOfCalculator.Count!=0 && stackOfCalculator.Peek() != "(")
+                    {
+                        postfix += stackOfCalculator.Peek();
+                        stackOfCalculator.Pop();
+                    }
+                    stackOfCalculator.Pop();
+                }
+
+                 
+
             }
-            string elements = stackOfNumbers.Pop();
-            double x, y;
-            if (!Double.TryParse(elements, out x))
+            for (int j = 0; j < stackOfCalculator.Count; j++)
             {
-                y = evalrpn(stackOfNumbers);
-                x = evalrpn(stackOfNumbers);
-                if (elements == "+") x += y;
-                else if (elements == "-") x -= y;
-                else if (elements == "*") x *= y;
-                else if (elements == "/") x /= y;
-                else throw new Exception();
+                postfix += stackOfCalculator.Pop();
+                stackOfCalculator.Pop();
             }
-            return x;
+          
+            
+            return postfix.ToString();
+        
+
         }
 
 
+        public double Calculation(string elements)
+        {
+            Stack<double> stackOfNumbers = new Stack<double>();
+            string infix = textBoxresult.Text;
+            string[] tokens = infix.Split(' ');
+         
+            foreach (string token in tokens)
+            {
+                double result;
+                if (double.TryParse(token, out result))
+                {
+                    stackOfNumbers.Push(result);
+                }
+                else
+                {
+                    switch (token)
+                    {
+                        case "X":
+                        case "x":
+                            {
+                                stackOfNumbers.Push(stackOfNumbers.Pop() * stackOfNumbers.Pop());
+                                break;
+                            }
+                        case "/":
+                        case ":":
+                            {
+                                result = stackOfNumbers.Pop();
+                                stackOfNumbers.Push(stackOfNumbers.Pop() / result);
+                                break;
+                            }
+                        case "+":
+                            {
+                                stackOfNumbers.Push(stackOfNumbers.Pop() + stackOfNumbers.Pop());
+                                break;
+                            }
+                        case "-":
+                            {
+                                result = stackOfNumbers.Pop();
+                                stackOfNumbers.Push(stackOfNumbers.Pop() - result);
+                                break;
+                            }
+                    }
+                }
+              
+            }
+            return stackOfNumbers.Pop();
+        }
 
+           private bool IsOperator(string operation)
+            {
+                if (operation == "+" || operation == "-" || operation == "x" || operation == ":" || operation == "^")
+
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        private bool IsDigit(string digit)
+        {
+            if (digit == "+" || digit == "-" || digit == "x" || digit == ":" || digit == "^" || digit == "(" || digit == ")")
+
+            {
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private int Precedence(string operation)
+            {
+                if (operation == "^")
+                {
+                    return 3;
+                }
+                else if (operation == "*" || operation == "/")
+                {
+                    return 2;
+                }
+                else if (operation == "+" || operation == "-")
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+        private void buttonpower_Click(object sender, EventArgs e)
+        {
+            textBoxresult.Text += " ^ ";
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void buttonleftparentheses_Click(object sender, EventArgs e)
+        {
+            textBoxresult.Text += "(";
+        }
+
+        private void buttonrightparentheses_Click(object sender, EventArgs e)
+        {
+            textBoxresult.Text += ")";
+        }
     }
 }
