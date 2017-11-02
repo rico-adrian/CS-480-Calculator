@@ -87,7 +87,7 @@ namespace Calculator
         private void buttonmultiply_Click(object sender, EventArgs e)
         {
             operand1 = textBoxresult.Text;
-            textBoxresult.Text += " x ";
+            textBoxresult.Text += 'x';
             operation = '*';
             //textBoxresult.Text = string.Empty;
         }
@@ -98,9 +98,9 @@ namespace Calculator
         {
             string tokens = textBoxresult.Text;
            
-            string[] infix = tokens.Split(' '); //splitting the tokens of string
+            char[] infix = tokens.ToCharArray(); //splitting the tokens of string
             //textBoxresult.Text = Text.ToString();
-            Stack<string> stackOfCalculator = new Stack<string>();
+            Stack<char> stackOfCalculator = new Stack<char>();
           // for(int i=0;i<infix.Length;i++)
            // {
                 //double x = Convert.ToDouble(tokens[i]);
@@ -111,33 +111,38 @@ namespace Calculator
             StringBuilder postfix = new StringBuilder();
             for (int i = 0; i < infix.Length; i++)
             {
-                if (infix[i] == " " || infix[i] == ".") { continue; }
-                else if (IsOperator(infix[i]))
+                if (infix[i] == ' ' || infix[i] == '.') { continue; }
+                  else if (IsOperator(infix[i]))
                 {
-                    postfix.Append(" ");
-                    while (stackOfCalculator.Count != 0 &&Precedence(infix[i])<= Precedence(stackOfCalculator.Peek()) )
+                    //postfix.Append(" ");
+                    while (stackOfCalculator.Count != 0&&(Precedence(infix[i]) <= Precedence(stackOfCalculator.Peek())))
                     {
                         
                         postfix.Append(stackOfCalculator.Peek());
                         stackOfCalculator.Pop();
-                        
+                        postfix.Append(' ');
+
                     }
                     stackOfCalculator.Push(infix[i]);
-                    postfix.Append(" ");
+                  
                 }
                 else if (IsDigit(infix[i]))
                 {
-                    postfix.Append(infix[i]).Append(" ");
+                    postfix.Append(infix[i]);
+                    if(!Char.IsDigit(infix.ElementAt(i))||i>=infix.Length)
+                    {
+                        postfix.Append(' ');
+                    }
                 }
 
-                else if (infix[i] == "(")
+                else if (infix[i] == '(')
                 {
                     stackOfCalculator.Push(infix[i]);
                 }
 
-                else if (infix[i] == ")")
+                else if (infix[i] == ')')
                 {
-                    while (stackOfCalculator.Count != 0 && stackOfCalculator.Peek() != "(")
+                    while (stackOfCalculator.Count != 0&&stackOfCalculator.Peek()!='(')
                     {
                         postfix.Append(stackOfCalculator.Peek());
                         stackOfCalculator.Pop();
@@ -172,21 +177,21 @@ namespace Calculator
         private void button12_Click(object sender, EventArgs e)
         {
             operand1 = textBoxresult.Text;
-            textBoxresult.Text += " + ";
+            textBoxresult.Text += '+';
             operation = '+';
         }
 
         private void buttonminus_Click(object sender, EventArgs e)
         {
             operand1 = textBoxresult.Text;
-            textBoxresult.Text += " - ";
+            textBoxresult.Text += '-';
             operation = '-';
         }
 
         private void buttondivide_Click(object sender, EventArgs e)
         {
             operand1 = textBoxresult.Text;
-            textBoxresult.Text += " : ";
+            textBoxresult.Text += ':';
             operation = '/';
         }
 
@@ -194,13 +199,13 @@ namespace Calculator
         public double Calculation(string element)
         {
             Stack<double> stackOfNumbers = new Stack<double>();
-            element = textBoxresult.Text;
-            string[] elements = element.Split(' ');
+            //element = textBoxresult.Text;
+            char[] elements = element.ToCharArray();
             
-            foreach (string token in elements)
+            foreach (char token in elements)
             {
                 double result;
-                if (double.TryParse(token, out result))
+                if (double.TryParse(token.ToString(), out result))
                 {
                     stackOfNumbers.Push(result);
                 }
@@ -208,31 +213,31 @@ namespace Calculator
                 {
                     switch (token)
                     {
-                        case "X":
-                        case "x":
+                        case 'X':
+                        case 'x':
                             {
                                 stackOfNumbers.Push(stackOfNumbers.Pop() * stackOfNumbers.Pop());
                                 break;
                             }
-                        case "/":
-                        case ":":
+                        case '/':
+                        case ':':
                             {
                                 result = stackOfNumbers.Pop();
                                 stackOfNumbers.Push(stackOfNumbers.Pop() / result);
                                 break;
                             }
-                        case "^":
+                        case '^':
                             {
                                 result = stackOfNumbers.Pop();
                                 stackOfNumbers.Push(Math.Pow(stackOfNumbers.Pop(), result));
                                 break;
                             }
-                        case "+":
+                        case '+':
                             {
                                 stackOfNumbers.Push(stackOfNumbers.Pop() + stackOfNumbers.Pop());
                                 break;
                             }
-                        case "-":
+                        case '-':
                             {
                                 result = stackOfNumbers.Pop();
                                 stackOfNumbers.Push(stackOfNumbers.Pop() - result);
@@ -245,9 +250,9 @@ namespace Calculator
             return stackOfNumbers.Pop();
         }
 
-           private bool IsOperator(string operation)
+           private bool IsOperator(char operation)
             {
-                if (operation == "+" || operation == "-" || operation == "x" || operation == ":" || operation == "^")
+                if (operation == '+' || operation == '-' || operation == 'x' || operation == ':' || operation == '^')
 
                 {
                     return true;
@@ -258,9 +263,9 @@ namespace Calculator
                 }
             }
 
-        private bool IsDigit(string digit)
+        private bool IsDigit(char digit)
         {
-            if (digit == "+" || digit == "-" || digit == "x" || digit == ":" || digit == "^" || digit == "(" || digit == ")")
+            if (digit == '+' || digit == '-' || digit == 'x' || digit == ':' || digit == '^' || digit == '(' || digit == ')')
 
             {
                 return false;
@@ -271,17 +276,17 @@ namespace Calculator
             }
         }
         
-        private int Precedence(string operation)
+        private int Precedence(char operation)
             {
-                if (operation == "^")
+                if (operation == '^')
                 {
                     return 3;
                 }
-                else if (operation == "x" || operation == ":")
+                else if (operation == 'x' || operation == ':')
                 {
                     return 2;
                 }
-                else if (operation == "+" || operation == "-")
+                else if (operation == '+' || operation == '-')
                 {
                     return 1;
                 }
