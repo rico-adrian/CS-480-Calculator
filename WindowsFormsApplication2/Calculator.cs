@@ -121,18 +121,13 @@ namespace Calculator
                                                              //of postfix that is going to be converted from infix
                 for (int i = 1; i <= infix.Length; i++)
                 {
-                    //everytime the loop encounter a space or dot/comma, go to the next character
-                    if (infix[i - 1] == ' ' || infix[i - 1] == '.')
-                    {
-                        continue;
-                    }
-
+                   
                     //if character of index n-1 is an operator, pop two elements from the stack, perform the
                     //math operation and push the result into the stack. perform the operation based on 
                     //comparing the precedence order.
                     //append 2 spaces is to make sure the postfix calculation works because it does not work
                     //without a space between them sometimes
-                    else if (IsOperator(infix[i - 1]))
+                    if (IsOperator(infix[i - 1]))
                     {
 
                         postfix.Append(" ");
@@ -145,6 +140,7 @@ namespace Calculator
                             postfix.Append(" ");
 
                         }
+
 
                         stackOfCalculator.Push(infix[i - 1]);
 
@@ -162,10 +158,14 @@ namespace Calculator
                             {
                                 postfix.Append(" ");
                             }
-                            else if (IsDigit(infix[i]))
-                            {
+                            else if (IsDigit(infix[i])&&!IsDigit('.'))
+                            {                            
                                 postfix.Append(infix[i]);
                                 i += 1;
+                            }
+                            else if (IsDigit('.'))
+                            {
+                                continue;
                             }
                         }
                     }
@@ -190,6 +190,10 @@ namespace Calculator
                         }
                         stackOfCalculator.Pop();
 
+                    }
+                    else
+                    {
+                        stackOfCalculator.Pop();
                     }
                   
 
